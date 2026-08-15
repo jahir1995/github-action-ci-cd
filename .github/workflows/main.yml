@@ -5,17 +5,29 @@ on:
     branches: [master]
 
 jobs:
-  deploy:
+  ci:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Deploy
+      - name: Pull Latest Code
         run: |
-          rsync -av --delete ./ /home/ubuntu/github-action-ci-cd/
+          cd /home/ubuntu/github-action-ci-cd
+          git pull origin master
+
+      - name: Install Dependencies
+        run: |
           cd /home/ubuntu/github-action-ci-cd
           npm i
+
+      - name: Run Tests
+        run: |
+          cd /home/ubuntu/github-action-ci-cd
           npm run test
-          pm2 restart background-task
+
+  cd:
+    needs: ci
+    runs-on: self-hosted
+
+    steps:
+      - name: Restart App
+        run: pm2 restart backend-prod
