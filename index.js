@@ -4,7 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
-  res.status(200).json({ status: "ok", message: "This is my first Github Action"});
+  res.status(200).json({ status: "ok", message: "This is my first Github Action CI/CD Setup"});
 });
 
 app.get("/health", (req, res) => {
